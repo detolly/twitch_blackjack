@@ -8,6 +8,7 @@ class Deck:
             for value in range(1, 13+1):
                 if not (value >= 2 and value <= 6):
                     self.cards.append(Card(suit, value))
+        self.ocards = self.cards.copy()
     
     def shuffle(self):
         shuffle(self.cards)

@@ -2,16 +2,20 @@ from deck import Deck
 from connection import Irc
 import threading
 from time import sleep
+from blackjack import BlackjackGame
 
 channel = "tsparkles"
+games = {}
 
 
 def commands(username, message, irc):
-    if ("!givemeacard" in message):
-        d = Deck()
-        d.shuffle()
-        c = d.get_card()
-        irc.sendMessage(c.get_printable(), channel)
+    if ("!blackjack" in message):
+        b = BlackjackGame(irc)
+        games[username] = b
+    if ("!hit" in message and games[username] is BlackjackGame):
+        irc.sendMessage(games[username].hit())
+    if ("!stand" in message and type(games[username]) is BlackjackGame):
+        irc.sendMessage(games[username].stand())
 
 
 def main():
@@ -19,6 +23,7 @@ def main():
     irc.connect()
     irc.join(channel)
 
+    sleep(2)
     while 1:
         username, message = irc.get_message()
         if (len(username) > 1):

@@ -16,10 +16,14 @@ class Irc:
 
     def connect(self):
         self.connection.connect((self.ip, self.port))
+        sleep(0.25)
         self.connection.send(self.encode("PASS " + self.oauth +    "\r\n"))
+        sleep(0.25)
         self.connection.send(self.encode("NICK " + self.username.lower() + "\r\n"))
 
     def join(self, channel):
+        sleep(0.5)
+        self.channel = channel
         self.connection.send(self.encode("JOIN #" + channel.lower() + "\r\n"))
 
     def sendMessage(self, message, channel):
