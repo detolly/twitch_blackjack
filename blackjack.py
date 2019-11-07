@@ -1,6 +1,5 @@
 from deck import Deck
 from card import Card
-from connection import Irc
 
 class BlackjackGame:
 
