@@ -1,9 +1,16 @@
 from deck import Deck
 from card import Card
+from connection import Irc
 
 class BlackjackGame:
 
-	def __init__(self, username):
+	winstrings = {
+		False: "lost",
+		True: "won",
+		None: "tied"
+	}
+
+	def __init__(self, username, irc : Irc):
 		self.dealer = []
 		self.ended = False
 		self.player = []
@@ -15,13 +22,17 @@ class BlackjackGame:
 		self.player.append(self.deck.get_card())
 		self.dealer.append(self.deck.get_card())
 		self.player.append(self.deck.get_card())
-		#self.player = [Card(0, 1), Card(0, 7)]
+		self.player = [Card(0, 1), Card(0, 11)]
+		irc.sendMessage("Started blackjack game.", irc.channel)
+		irc.sendMessage(self.status(), irc.channel)
+		if (self.gethighestpossibleofsummedcards(self.sumcards(self.player)) == 21):
+			irc.sendMessage(self.stand(True), irc.channel)
 
-	def status(self) -> str:
+	def status(self, isblackjack=False) -> str:
 		current = "@{}'s hand: ".format(self.username)
 		for i in range(len(self.player)):
 			current += "[{}]".format(self.player[i].get_printable()) + " "
-		current += "({}) ".format(self.getformatfromsum(self.sumcards(self.player)))
+		current += "({}) ".format(self.getformatfromsum(self.sumcards(self.player))) + "Blackjack" if isblackjack else ""
 		current += ". Dealer hand: "
 		for i in range(len(self.dealer)):
 			current += "[{}]".format(self.dealer[i].get_printable()) + " "
@@ -43,19 +54,21 @@ class BlackjackGame:
 		else:
 			return self.status()
 
-	def stand(self) -> str:
+	def stand(self, isblackjack=False) -> str:
 		self.dealer[0].hidden = False
-		while self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) <= self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
+		while self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) < self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
 			self.hit(self.dealer)
 		if not(self.is_busted(self.dealer)) and self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) > self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
-			return self.end(False)
+			return self.end(False, isblackjack)
+		elif self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) == self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
+			return self.end(None, isblackjack)
 		else:
-			return self.end(True)
+			return self.end(True, isblackjack)
 
-	def end(self, did_player_win : bool) -> str:
+	def end(self, did_player_win : bool, isblackjack=False) -> str:
 		self.ended = True
-		current = "@{} {}! ".format(self.username, "won" if did_player_win else "lost")
-		current += self.status()
+		current = "@{} {}! ".format(self.username, BlackjackGame.winstrings.get(did_player_win, "tied"))
+		current += self.status(isblackjack)
 		return current
 
 	#def double(self):
