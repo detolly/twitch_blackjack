@@ -22,7 +22,6 @@ class BlackjackGame:
 		self.player.append(self.deck.get_card())
 		self.dealer.append(self.deck.get_card())
 		self.player.append(self.deck.get_card())
-		self.player = [Card(0, 1), Card(0, 11)]
 		irc.sendMessage("Started blackjack game.", irc.channel)
 		irc.sendMessage(self.status(), irc.channel)
 		if (self.gethighestpossibleofsummedcards(self.sumcards(self.player)) == 21):
