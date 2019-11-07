@@ -1,4 +1,4 @@
-import socket, string, time, threading
+import socket, string, time
 from time import sleep
 import re
 
