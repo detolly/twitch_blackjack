@@ -31,7 +31,7 @@ class BlackjackGame:
 		current = "@{}'s hand: ".format(self.username)
 		for i in range(len(self.player)):
 			current += "[{}]".format(self.player[i].get_printable()) + " "
-		current += "({}) ".format(self.getformatfromsum(self.sumcards(self.player))) + "Blackjack" if isblackjack else ""
+		current += "({}) ".format(self.getformatfromsum(self.sumcards(self.player))) + ("Blackjack" if isblackjack else "")
 		current += ". Dealer hand: "
 		for i in range(len(self.dealer)):
 			current += "[{}]".format(self.dealer[i].get_printable()) + " "
