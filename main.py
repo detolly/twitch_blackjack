@@ -7,7 +7,6 @@ from blackjack import BlackjackGame
 channel = "tsparkles"
 games = {}
 
-
 def commands(username, message, irc):
     if ("!blackjack" in message and not username in games.keys()):
         b = BlackjackGame(username, irc)
