@@ -19,11 +19,11 @@ class BlackjackGame:
 	def status(self) -> str:
 		current = "Player hand: "
 		for i in range(len(self.player)):
-			current += self.player[i].get_printable() + " "
+			current += "[{}]".format(self.player[i].get_printable()) + " "
 		current += "({}) ".format(self.sumcards(self.player))
 		current += ". Dealer hand: "
 		for i in range(len(self.dealer)):
-			current += self.dealer[i].get_printable() + " "
+			current += "[{}]".format(self.dealer[i].get_printable()) + " "
 		current += "({})".format(self.sumcards(self.dealer))
 		current += "."
 		return current
