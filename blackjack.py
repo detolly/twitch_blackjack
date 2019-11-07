@@ -4,20 +4,17 @@ from connection import Irc
 
 class BlackjackGame:
 
-	def __init__(self, irc : Irc):
+	def __init__(self):
 		self.dealer = []
-		self.irc = irc
 		self.ended = False
 		self.player = []
 		self.deck = Deck()
 		self.deck.shuffle()
-		irc.sendMessage("Started blackjack game.", irc.channel)
 		self.dealer.append(self.deck.get_card())
 		self.dealer[0].hidden = True
 		self.player.append(self.deck.get_card())
 		self.dealer.append(self.deck.get_card())
 		self.player.append(self.deck.get_card())
-		irc.sendMessage(self.status(), irc.channel)
 
 	def status(self) -> str:
 		current = "Player hand: "
@@ -47,7 +44,7 @@ class BlackjackGame:
 
 	def stand(self) -> str:
 		self.dealer[0].hidden = False
-		while self.sumcards(self.dealer) < 17:
+		while self.sumcards(self.dealer) < self.sumcards(self.player):
 			self.hit(self.dealer)
 		if not(self.is_busted(self.dealer)) and self.sumcards(self.dealer) > self.sumcards(self.player):
 			return self.end(False)

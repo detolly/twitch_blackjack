@@ -10,8 +10,10 @@ games = {}
 
 def commands(username, message, irc):
     if ("!blackjack" in message and not username in games.keys()):
-        b = BlackjackGame(irc)
+        b = BlackjackGame()
         games[username] = b
+        irc.sendMessage("Started blackjack game.", channel)
+        irc.sendMessage(b.status(), channel)
     if (username in games.keys()):
         if ("!hit" in message and type(games[username]) is BlackjackGame):
             irc.sendMessage(games[username].playerhit(), channel)
