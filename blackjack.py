@@ -31,15 +31,19 @@ class BlackjackGame:
 		current += "."
 		return current
 
-	def hit(self, cards) -> str:
+	def hit(self, cards) -> bool:
 		cards.append(self.deck.get_card())
 		if self.is_busted(cards):
-			return "busted"
+			return True
 		else:
-			return self.status()
+			return False
 
 	def playerhit(self) -> str:
-		return self.hit(self.player)
+		a = self.hit(self.player)
+		if (a):
+			return self.end(a)
+		else:
+			return self.status()
 
 	def stand(self) -> str:
 		self.dealer[0].hidden = False
