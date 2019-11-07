@@ -7,6 +7,7 @@ class BlackjackGame:
 	def __init__(self, irc : Irc):
 		self.dealer = []
 		self.irc = irc
+		self.ended = False
 		self.player = []
 		self.deck = Deck()
 		self.deck.shuffle()
@@ -19,11 +20,11 @@ class BlackjackGame:
 		irc.sendMessage(self.status(), irc.channel)
 
 	def status(self) -> str:
-		current = "Current player hand: "
+		current = "Player hand: "
 		for i in range(len(self.player)):
 			current += self.player[i].get_printable() + " "
 		current += "({}) ".format(self.sumcards(self.player))
-		current += " and the dealer has "
+		current += ". Dealer hand: "
 		for i in range(len(self.dealer)):
 			current += self.dealer[i].get_printable() + " "
 		current += "({})".format(self.sumcards(self.dealer))
@@ -37,13 +38,23 @@ class BlackjackGame:
 		else:
 			return self.status()
 
+	def playerhit(self) -> str:
+		return self.hit(self.player)
+
 	def stand(self) -> str:
+		self.dealer[0].hidden = False
 		while self.sumcards(self.dealer) < 17:
 			self.hit(self.dealer)
-		if not(self.is_busted(self.dealer)) and sum(self.dealer) > sum(self.player):
-			print("player lost")
+		if not(self.is_busted(self.dealer)) and self.sumcards(self.dealer) > self.sumcards(self.player):
+			return self.end(False)
 		else:
-			print("player won")
+			return self.end(True)
+
+	def end(self, did_player_win : bool) -> str:
+		self.ended = True
+		current = "Player won! " if did_player_win else "Player lost. "
+		current += self.status()
+		return current
 
 	#def double(self):
 
@@ -54,5 +65,6 @@ class BlackjackGame:
 	def sumcards(self, cards) -> int:
 		sum = 0
 		for i in range(len(cards)):
-			sum += Card.blackjackvalues.get(cards[i].value)
+			if not cards[i].hidden:
+				sum += Card.blackjackvalues.get(cards[i].value)
 		return sum
