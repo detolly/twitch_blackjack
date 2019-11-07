@@ -32,7 +32,7 @@ class Irc:
     def sendRaw(self, raw):
         self.connection.send(self.encode(raw))
 
-    def download_from_irc(self):
+    def download_from_socket(self):
         raw = self.connection.recv(1024).decode("utf-8")
         arr = raw.split("\r\n")
         for i in range(len(arr)):
@@ -43,7 +43,7 @@ class Irc:
                     self.sendRaw("PONG :tmi.twitch.tv\r\n")
 
     def get_message(self):
-        self.download_from_irc()
+        self.download_from_socket()
         if (len(self.messages) > 0):
             response = self.messages.pop(0)
             username = re.search(r"\w+", response).group(0)
