@@ -55,7 +55,7 @@ class BlackjackGame:
 
 	def stand(self, isblackjack=False) -> str:
 		self.dealer[0].hidden = False
-		while self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) < self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
+		while self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) < 17 or self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) < self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
 			self.hit(self.dealer)
 		if not(self.is_busted(self.dealer)) and self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) > self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
 			return self.end(False, isblackjack)
