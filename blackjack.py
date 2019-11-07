@@ -4,10 +4,11 @@ from connection import Irc
 
 class BlackjackGame:
 
-	def __init__(self):
+	def __init__(self, username):
 		self.dealer = []
 		self.ended = False
 		self.player = []
+		self.username = username
 		self.deck = Deck()
 		self.deck.shuffle()
 		self.dealer.append(self.deck.get_card())
@@ -17,7 +18,7 @@ class BlackjackGame:
 		self.player.append(self.deck.get_card())
 
 	def status(self) -> str:
-		current = "Player hand: "
+		current = "@{}'s hand: ".format(self.username)
 		for i in range(len(self.player)):
 			current += "[{}]".format(self.player[i].get_printable()) + " "
 		current += "({}) ".format(self.sumcards(self.player))
@@ -53,7 +54,7 @@ class BlackjackGame:
 
 	def end(self, did_player_win : bool) -> str:
 		self.ended = True
-		current = "Player won! " if did_player_win else "Player lost. "
+		current = "@{} {}! ".format(self.username, "won" if did_player_win else "lost")
 		current += self.status()
 		return current
 
