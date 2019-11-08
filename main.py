@@ -22,12 +22,14 @@ def commands(username, message, irc):
             irc.sendMessage(games[username].stand(), channel)
             if games[username].ended:
                 games.pop(username)
+        if ("!status" in message and type(games[username]) is BlackjackGame):
+            irc.sendMessage(games[username].status(), channel)
 
 def main():
-    oauth = ""
-    with open("password.txt", "r") as f:
-        oauth = f.read()
-    irc : Irc = Irc("irc.chat.twitch.tv", 6667, "tSparkles", oauth)
+    #oauth = ""
+    #with open("password.txt", "r") as f:
+    #    oauth = f.read()
+    irc : Irc = Irc("irc.chat.twitch.tv", 6667, "the_blackjack_bot", "oauth:yrsp0iesatbbmvjfoul4wow5sjikin")
     irc.connect()
     irc.join(channel)
 
