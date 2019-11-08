@@ -20,11 +20,19 @@ class Irc:
         self.connection.send(self.encode("PASS " + self.oauth +    "\r\n"))
         sleep(0.25)
         self.connection.send(self.encode("NICK " + self.username.lower() + "\r\n"))
+        sleep(0.15)
+        self.connection.send(self.encode("JOIN #" + self.username.lower() + "\r\n"))
+        with open("channels.txt", "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                self.join(line)
 
     def join(self, channel):
-        sleep(0.5)
         self.channel = channel
         self.connection.send(self.encode("JOIN #" + channel.lower() + "\r\n"))
+
+    def part(self, channel):
+        self.connection.send(self.encode("PART #" + channel.lower() + "\r\n"))
 
     def sendMessage(self, message, channel):
         self.connection.send(self.encode("PRIVMSG #{} :{}\r\n".format(channel, message)))

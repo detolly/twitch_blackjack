@@ -10,7 +10,7 @@ channelstojoin = [
 ]
 games = {}
 
-def commands(username, message, channel, irc):
+def game(username, message, channel, irc):
     if (channel not in games.keys()):
         games[channel] = {}
     if ("!blackjack" in message and not username in games[channel].keys()):
@@ -30,6 +30,26 @@ def commands(username, message, channel, irc):
         if ("!status" in message and type(games[channel][username]) is BlackjackGame):
             irc.sendMessage(games[channel][username].status(), channel)
 
+def commands(username, message, channel, irc):
+    if ("!join" in message and channel == os.environ["username"]):
+        join(username, irc)
+    elif("!part" in message and channel == username):
+        part(username, irc)
+
+def part(chn, irc):
+    irc.part(chn)
+    with open("channels.txt", "r") as f:
+        lines = f.readlines()
+    with open("channels.txt", "w") as f:
+        for line in lines:
+            if line.strip("\n") != chn:
+                f.write(line)
+
+def join(chn, irc):
+    irc.join(chn)
+    with open("channels.txt", "a+") as f:
+        f.write(chn + "\n")
+
 def main():
     #oauth = ""
     #with open("password.txt", "r") as f:
@@ -44,6 +64,7 @@ def main():
     while 1:
         username, message, channel = irc.get_message()
         if (len(username) > 1):
+            game(username, message, channel, irc)
             commands(username, message, channel, irc)
             print(username + ":", "\t", message)
         sleep(0.01)
