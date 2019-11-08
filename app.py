@@ -3,6 +3,7 @@ from connection import Irc
 import threading
 from time import sleep
 from blackjack import BlackjackGame
+import os
 
 channelstojoin = [
     "tsparkles", "avatarinator_", "loweffortstream"
@@ -33,7 +34,7 @@ def main():
     #oauth = ""
     #with open("password.txt", "r") as f:
     #    oauth = f.read()
-    irc : Irc = Irc("irc.chat.twitch.tv", 6667, "the_blackjack_bot", "oauth:yrsp0iesatbbmvjfoul4wow5sjikin")
+    irc : Irc = Irc("irc.chat.twitch.tv", 6667, os.environ["username"], os.environ["oauth"])
     irc.connect()
 
     for i in range(len(channelstojoin)):
