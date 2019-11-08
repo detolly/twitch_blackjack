@@ -22,7 +22,7 @@ class Irc:
         self.connection.send(self.encode("NICK " + self.username.lower() + "\r\n"))
         sleep(0.15)
         self.connection.send(self.encode("JOIN #" + self.username.lower() + "\r\n"))
-        with open("channels.txt", "r") as f:
+        with open("channels.txt", "r+") as f:
             lines = f.readlines()
             for line in lines:
                 self.join(line)

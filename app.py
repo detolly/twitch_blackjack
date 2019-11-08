@@ -6,6 +6,7 @@ from blackjack import BlackjackGame
 import os
 
 games = {}
+lines = []
 
 def game(username, message, channel, irc):
     if (channel not in games.keys()):
@@ -29,25 +30,34 @@ def game(username, message, channel, irc):
 
 def commands(username, message, channel, irc):
     if ("!join" in message and channel == os.environ["username"]):
-        join(username, irc)
-        irc.sendMessage("Will now join " + username + "\'s channel.", channel)
+        if (join(username, irc)):
+            irc.sendMessage("Will now join " + username + "\'s channel.", channel)
     elif("!part" in message and channel == username):
-        part(username, irc)
-        irc.sendMessage("Leaving " + username + "\'s channel.", channel)
+        if (part(username, irc)):
+            irc.sendMessage("Leaving " + username + "\'s channel.", channel)
+
 
 def part(chn, irc):
-    irc.part(chn)
-    with open("channels.txt", "r") as f:
-        lines = f.readlines()
-    with open("channels.txt", "w") as f:
-        for line in lines:
-            if line.strip("\n") != chn:
-                f.write(line)
+    global lines
+    if not chn in lines:
+        irc.part(chn)
+        with open("channels.txt", "r") as f:
+            lines = f.readlines()
+        with open("channels.txt", "w") as f:
+            for line in lines:
+                if line.strip("\n") != chn:
+                    f.write(line)
+        return True
+    return False
 
 def join(chn, irc):
-    irc.join(chn)
-    with open("channels.txt", "a+") as f:
-        f.write(chn + "\n")
+    global lines
+    if not chn in lines:
+        irc.join(chn)
+        with open("channels.txt", "a+") as f:
+            f.write(chn + "\n")
+        return True
+    return False
 
 def main():
     #oauth = ""
@@ -64,6 +74,5 @@ def main():
             commands(username, message, channel, irc)
             print(username + ":", "\t", message)
         sleep(0.01)
-
 
 main()
