@@ -10,6 +10,10 @@ class Irc:
         self.username = username
         self.oauth = oauth
         self.messages = []
+        with open("channels.txt", "w+") as f:
+            lines = f.readlines()
+            for i in range(len(lines)):
+                print(lines[i])
 
     def encode(self, text):
         return text.encode("utf-8")
