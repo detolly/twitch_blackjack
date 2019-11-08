@@ -52,10 +52,11 @@ def part(chn, irc):
 
 def join(chn, irc):
     global lines
-    if not chn in lines:
-        irc.join(chn)
-        with open("channels.txt", "a+") as f:
+    with open("channels.txt", "a+") as f:
+        lines = f.readlines()
+        if not chn in lines:
             f.write(chn + "\n")
+            irc.join(chn)
         return True
     return False
 
