@@ -5,9 +5,6 @@ from time import sleep
 from blackjack import BlackjackGame
 import os
 
-channelstojoin = [
-    "tsparkles", "avatarinator_", "loweffortstream"
-]
 games = {}
 
 def game(username, message, channel, irc):
@@ -33,8 +30,10 @@ def game(username, message, channel, irc):
 def commands(username, message, channel, irc):
     if ("!join" in message and channel == os.environ["username"]):
         join(username, irc)
+        irc.sendMessage("Will now join " + username + "\'s channel.", channel)
     elif("!part" in message and channel == username):
         part(username, irc)
+        irc.sendMessage("Leaving " + username + "\'s channel.", channel)
 
 def part(chn, irc):
     irc.part(chn)
@@ -56,9 +55,6 @@ def main():
     #    oauth = f.read()
     irc : Irc = Irc("irc.chat.twitch.tv", 6667, os.environ["username"], os.environ["oauth"])
     irc.connect()
-
-    for i in range(len(channelstojoin)):
-        irc.join(channelstojoin[i])
 
     sleep(2)
     while 1:
