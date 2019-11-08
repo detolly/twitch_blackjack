@@ -4,7 +4,7 @@ import threading
 from time import sleep
 from blackjack import BlackjackGame
 
-channel = "tsparkles"
+channel = "loweffortstream"
 games = {}
 
 def commands(username, message, irc):

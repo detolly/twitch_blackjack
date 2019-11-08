@@ -6,12 +6,11 @@ class Deck:
         self.cards = []
         for suit in range(4):
             for value in range(1, 13+1):
-                if not (value >= 2 and value <= 6):
-                    self.cards.append(Card(suit, value))
-        self.ocards = self.cards.copy()
+                self.cards.append(Card(suit, value))
     
-    def shuffle(self):
-        shuffle(self.cards)
+    def shuffle(self, r=10):
+        for i in range(r):
+            shuffle(self.cards)
 
     def get_card(self):
         return self.cards.pop()
