@@ -49,5 +49,6 @@ class Irc:
             username = re.search(r"\w+", response).group(0)
             mask = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
             message = mask.sub("", response)
-            return username, message
-        return "", ""
+            channel = response[response.index("#")+1:response.index(":", response.index("#")+1)-1]
+            return username, message, channel
+        return "", "", ""

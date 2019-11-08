@@ -10,7 +10,8 @@ class BlackjackGame:
 		None: "tied"
 	}
 
-	def __init__(self, username, irc : Irc):
+	def __init__(self, username, irc : Irc, channel):
+		self.channel = channel
 		self.dealer = []
 		self.ended = False
 		self.player = []
@@ -22,10 +23,10 @@ class BlackjackGame:
 		self.player.append(self.deck.get_card())
 		self.dealer.append(self.deck.get_card())
 		self.player.append(self.deck.get_card())
-		irc.sendMessage("Started blackjack game.", irc.channel)
-		irc.sendMessage(self.status(), irc.channel)
+		irc.sendMessage("Started blackjack game.", channel)
+		irc.sendMessage(self.status(), channel)
 		if (self.gethighestpossibleofsummedcards(self.sumcards(self.player)) == 21):
-			irc.sendMessage(self.stand(True), irc.channel)
+			irc.sendMessage(self.stand(True), channel)
 
 	def status(self, isblackjack=False) -> str:
 		current = "@{}'s hand: ".format(self.username)

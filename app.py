@@ -4,26 +4,30 @@ import threading
 from time import sleep
 from blackjack import BlackjackGame
 
-channel = "loweffortstream"
+channelstojoin = [
+    "tsparkles", "avatarinator_", "loweffortstream"
+]
 games = {}
 
-def commands(username, message, irc):
-    if ("!blackjack" in message and not username in games.keys()):
-        b = BlackjackGame(username, irc)
-        games[username] = b
-        if games[username].ended:
-            games.pop(username)
-    elif (username in games.keys()):
-        if ("!hit" in message and type(games[username]) is BlackjackGame):
-            irc.sendMessage(games[username].playerhit(), channel)
-            if games[username].ended:
-                games.pop(username)
-        if ("!stand" in message and type(games[username]) is BlackjackGame):
-            irc.sendMessage(games[username].stand(), channel)
-            if games[username].ended:
-                games.pop(username)
-        if ("!status" in message and type(games[username]) is BlackjackGame):
-            irc.sendMessage(games[username].status(), channel)
+def commands(username, message, channel, irc):
+    if (channel not in games.keys()):
+        games[channel] = {}
+    if ("!blackjack" in message and not username in games[channel].keys()):
+        b = BlackjackGame(username, irc, channel)
+        games[channel][username] = b
+        if (games[channel][username]).ended:
+            games[channel].pop(username)
+    elif (username in games[channel].keys()):
+        if ("!hit" in message and type(games[channel][username]) is BlackjackGame):
+            irc.sendMessage(games[channel][username].playerhit(), channel)
+            if games[channel][username].ended:
+                games[channel].pop(username)
+        if ("!stand" in message and type(games[channel][username]) is BlackjackGame):
+            irc.sendMessage(games[channel][username].stand(), channel)
+            if games[channel][username].ended:
+                games[channel].pop(username)
+        if ("!status" in message and type(games[channel][username]) is BlackjackGame):
+            irc.sendMessage(games[channel][username].status(), channel)
 
 def main():
     #oauth = ""
@@ -31,13 +35,15 @@ def main():
     #    oauth = f.read()
     irc : Irc = Irc("irc.chat.twitch.tv", 6667, "the_blackjack_bot", "oauth:yrsp0iesatbbmvjfoul4wow5sjikin")
     irc.connect()
-    irc.join(channel)
+
+    for i in range(len(channelstojoin)):
+        irc.join(channelstojoin[i])
 
     sleep(2)
     while 1:
-        username, message = irc.get_message()
+        username, message, channel = irc.get_message()
         if (len(username) > 1):
-            commands(username, message, irc)
+            commands(username, message, channel, irc)
             print(username + ":", "\t", message)
         sleep(0.01)
 
