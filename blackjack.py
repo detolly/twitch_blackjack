@@ -48,19 +48,21 @@ class BlackjackGame:
 			return False
 
 	def playerhit(self) -> str:
-		a = self.hit(self.player)
+		a = self.hit(self.player) # boolean not very consistent but it works and i guess it just worked that way in my brain
 		if (a):
-			return self.end(not a)
+			return self.end(not a) # lol
 		else:
 			return self.status()
 
 	def stand(self, isblackjack=False) -> str:
 		self.dealer[0].hidden = False
-		while self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) < 17 or self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) < self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
+		sum_dealer = self.gethighestpossibleofsummedcards(self.sumcards(self.dealer))
+		sum_player = self.gethighestpossibleofsummedcards(self.sumcards(self.player))
+		while sum_dealer < 17 or sum_dealer < sum_player:
 			self.hit(self.dealer)
-		if not(self.is_busted(self.dealer)) and self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) > self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
+		if not(self.is_busted(self.dealer)) and sum_dealer > sum_player:
 			return self.end(False, isblackjack)
-		elif self.gethighestpossibleofsummedcards(self.sumcards(self.dealer)) == self.gethighestpossibleofsummedcards(self.sumcards(self.player)):
+		elif sum_dealer == sum_player:
 			return self.end(None, isblackjack)
 		else:
 			return self.end(True, isblackjack)
@@ -72,6 +74,7 @@ class BlackjackGame:
 		return current
 
 	#def double(self):
+	#def split(self): I'm never going to make this looooool someone make pull request and do this for me please
 
 	def is_busted(self, cards) -> bool:
 		sum = self.sumcards(cards)

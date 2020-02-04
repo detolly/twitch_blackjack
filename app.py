@@ -1,3 +1,5 @@
+#!/usr/bin/python3.6
+
 from deck import Deck
 from connection import Irc
 import threading
@@ -7,6 +9,8 @@ import os
 
 games = {}
 lines = []
+bot_username = ""
+oauth = ""
 
 def game(username, message, channel, irc):
     if (channel not in games.keys()):
@@ -29,7 +33,8 @@ def game(username, message, channel, irc):
             irc.sendMessage(games[channel][username].status(), channel)
 
 def commands(username, message, channel, irc):
-    if ("!join" in message and channel == os.environ["username"]):
+    global bot_username
+    if ("!join" in message and channel == bot_username):
         if (join(username, irc)):
             irc.sendMessage("Will now join " + username + "\'s channel.", channel)
     elif("!part" in message and channel == username):
@@ -61,10 +66,13 @@ def join(chn, irc):
     return False
 
 def main():
-    #oauth = ""
-    #with open("password.txt", "r") as f:
-    #    oauth = f.read()
-    irc : Irc = Irc("irc.chat.twitch.tv", 6667, os.environ["username"], os.environ["oauth"])
+    #username = os.environ["username"]
+    global bot_username, oauth
+    bot_username = "the_blackjack_bot"
+    #oauth = os.environ["oauth"]
+    with open("password.txt", "r") as f:
+        oauth = f.read()
+    irc : Irc = Irc("irc.chat.twitch.tv", 6667, bot_username, oauth)
     irc.connect()
 
     sleep(2)
