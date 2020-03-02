@@ -68,7 +68,7 @@ def join(chn, irc):
 def main():
     #username = os.environ["blackjack_username"]
     global bot_username, oauth
-    bot_username = "the_blackjack_bot"
+    bot_username = "theblackjackbot"
     #oauth = os.environ["blackjack_oauth"]
     with open("password.txt", "r") as f:
         oauth = f.read()
