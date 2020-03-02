@@ -66,10 +66,10 @@ def join(chn, irc):
     return False
 
 def main():
-    #username = os.environ["username"]
+    #username = os.environ["blackjack_username"]
     global bot_username, oauth
     bot_username = "the_blackjack_bot"
-    #oauth = os.environ["oauth"]
+    #oauth = os.environ["blackjack_oauth"]
     with open("password.txt", "r") as f:
         oauth = f.read()
     irc : Irc = Irc("irc.chat.twitch.tv", 6667, bot_username, oauth)

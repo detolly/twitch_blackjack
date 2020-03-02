@@ -45,7 +45,7 @@ class Irc:
         self.connection.send(self.encode(raw))
 
     def download_from_socket(self):
-        raw = self.connection.recv(1024).decode("utf-8")
+        raw = self.connection.recv(61440).decode("utf-8")
         arr = raw.split("\r\n")
         for i in range(len(arr)):
             if (len(arr[i]) > 0):
@@ -56,7 +56,7 @@ class Irc:
 
     def get_message(self):
         self.download_from_socket()
-        if (len(self.messages) > 0):
+        while (len(self.messages) > 0):
             response = self.messages.pop(0)
             username = re.search(r"\w+", response).group(0)
             mask = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")

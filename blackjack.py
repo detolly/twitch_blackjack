@@ -59,13 +59,14 @@ class BlackjackGame:
 		sum_dealer = self.gethighestpossibleofsummedcards(self.sumcards(self.dealer))
 		sum_player = self.gethighestpossibleofsummedcards(self.sumcards(self.player))
 		while sum_dealer < 17 or sum_dealer < sum_player:
-			self.hit(self.dealer)
+                    self.hit(self.dealer)
+                    sum_dealer = self.gethighestpossibleofsummedcards(self.sumcards(self.dealer))
 		if not(self.is_busted(self.dealer)) and sum_dealer > sum_player:
-			return self.end(False, isblackjack)
+		    return self.end(False, isblackjack)
 		elif sum_dealer == sum_player:
-			return self.end(None, isblackjack)
+		    return self.end(None, isblackjack)
 		else:
-			return self.end(True, isblackjack)
+		    return self.end(True, isblackjack)
 
 	def end(self, did_player_win : bool, isblackjack=False) -> str:
 		self.ended = True
